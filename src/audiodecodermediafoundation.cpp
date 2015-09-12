@@ -32,6 +32,13 @@
 
 #include "audiodecodermediafoundation.h"
 
+// auto-include
+#ifdef _MSC_VER
+#pragma comment( lib, "mfplat.lib")
+#pragma comment( lib, "mfreadwrite.lib")
+
+#endif
+
 const int kBitsPerSample = 16;
 const int kNumChannels = 2;
 const int kSampleRate = 44100;
@@ -131,13 +138,14 @@ int AudioDecoderMediaFoundation::open()
     LPCWSTR result = m_wcFilename;
 
     HRESULT hr(S_OK);
+/*
     // Initialize the COM library.
     hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
     if (FAILED(hr)) {
         std::cerr << "SSMF: failed to initialize COM" << std::endl;
         return AUDIODECODER_ERROR;
     }
-
+*/
     // Initialize the Media Foundation platform.
     hr = MFStartup(MF_VERSION);
     if (FAILED(hr)) {
@@ -423,7 +431,7 @@ releaseSample:
     return samples_read;
 }
 
-inline int AudioDecoderMediaFoundation::numSamples()
+int AudioDecoderMediaFoundation::numSamples()
 {
     int len(secondsFromMF(m_mfDuration) * m_iSampleRate * m_iChannels);
     return len % m_iChannels == 0 ? len : len + 1;

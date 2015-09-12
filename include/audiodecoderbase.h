@@ -43,7 +43,7 @@
 #include <string>
 #include <vector>
 
-#ifdef _WIN32
+#ifdef _MAKE_DLL
 #define DllExport   __declspec( dllexport )
 #else
 #define DllExport

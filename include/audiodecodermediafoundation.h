@@ -14,13 +14,15 @@
 
 #include "audiodecoderbase.h"
 
+#ifdef _MAKE_DLL
 //Force MSVC to generate a .lib file with /implib but without a .def file
 //http://msdn.microsoft.com/en-us/library/67wc07b9(v=vs.80).aspx
 DllExport int AudioDecoderMediaFoundation = 1;
+#endif
 
-class IMFSourceReader;
-class IMFMediaType;
-class IMFMediaSource;
+struct IMFSourceReader;
+struct IMFMediaType;
+struct IMFMediaSource;
 
 #define SHORT_SAMPLE short
 
@@ -31,7 +33,7 @@ class DllExport AudioDecoderMediaFoundation : public AudioDecoderBase {
     int open();
     int seek(int sampleIdx);
     int read(int size, const SAMPLE *buffer);
-    inline int numSamples();
+    int numSamples();
     std::vector<std::string> supportedFileExtensions();
 
   private:
