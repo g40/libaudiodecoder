@@ -42,15 +42,13 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #ifdef _MAKE_DLL
 #define DllExport   __declspec( dllexport )
 #else
 #define DllExport
 #endif
-
-//Types
-typedef float SAMPLE;
 
 //Error codes
 #define AUDIODECODER_ERROR -1
@@ -77,7 +75,10 @@ class DllExport AudioDecoderBase
         /** Read a maximum of 'size' samples of audio into buffer. 
             Samples are always returned as 32-bit floats, with stereo interlacing.
             Returns the number of samples read. */
-        int read(int size, const SAMPLE *buffer) { return 0u; };
+        int read(int size, const float *buffer) { return 0u; };
+
+		// read into
+		uint64_t read(uint64_t size, const float *buffer) { return 0u; };
 
         /** Get the number of audio samples in the file. This will be a good estimate of the 
             number of samples you can get out of read(), though you should not rely on it

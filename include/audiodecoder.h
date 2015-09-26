@@ -49,6 +49,7 @@ class DllExport AudioDecoder : public AudioDecoderMediaFoundation
 {
     public:
         AudioDecoder(const std::string filename) : AudioDecoderMediaFoundation(filename) {};
+		virtual ~AudioDecoder()	{}
 };
 
 #elif __APPLE__
@@ -57,6 +58,7 @@ class AudioDecoder : public AudioDecoderCoreAudio
 {
     public:
         AudioDecoder(const std::string filename) : AudioDecoderCoreAudio(filename) {};
+		virtual ~AudioDecoder()	{}
 };
 #endif
 

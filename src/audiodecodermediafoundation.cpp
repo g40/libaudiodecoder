@@ -224,7 +224,15 @@ int AudioDecoderMediaFoundation::seek(int sampleIdx)
     return result;
 }
 
-int AudioDecoderMediaFoundation::read(int size, const SAMPLE *destination)
+//-----------------------------------------------------------------------------
+// performs a de-interleaving
+int AudioDecoderMediaFoundation::read(int size, std::vector<float*>& buffer)
+{
+	return 0;
+}
+
+//-----------------------------------------------------------------------------
+int AudioDecoderMediaFoundation::read(int size, const float* destination)
 {
 	assert(size < sizeof(m_destBufferShort));
     if (sDebug) { std::cout << "read() " << size << std::endl; }
@@ -414,7 +422,7 @@ releaseSample:
 	//Convert to float samples
 	if (m_iChannels == 2)
 	{
-		SAMPLE *destBufferFloat(const_cast<SAMPLE*>(destination));
+		float* destBufferFloat(const_cast<float*>(destination));
 		for (unsigned long i = 0; i < samples_read; i++)
 		{
 			destBufferFloat[i] = destBuffer[i] / (float)sampleMax;
@@ -422,7 +430,7 @@ releaseSample:
 	}
 	else //Assuming mono, duplicate into stereo frames...
 	{
-		SAMPLE *destBufferFloat(const_cast<SAMPLE*>(destination));
+		float* destBufferFloat(const_cast<float*>(destination));
 		for (unsigned long i = 0; i < samples_read; i++)
 		{
 			destBufferFloat[i] = destBuffer[i] / (float)sampleMax;

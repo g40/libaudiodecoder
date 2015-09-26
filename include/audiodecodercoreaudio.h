@@ -71,7 +71,7 @@ public:
     // Overriding AudioDecoderBase 
     int open();
     int seek(int sampleIdx);
-    int read(int size, const SAMPLE *buffer);
+    int read(int size, const float* buffer);
     static std::vector<std::string> supportedFileExtensions();
 private:
     SInt64 m_headerFrames;

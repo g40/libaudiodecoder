@@ -24,39 +24,45 @@ struct IMFSourceReader;
 struct IMFMediaType;
 struct IMFMediaSource;
 
-#define SHORT_SAMPLE short
+class DllExport AudioDecoderMediaFoundation : public AudioDecoderBase
+{
 
-class DllExport AudioDecoderMediaFoundation : public AudioDecoderBase {
-  public:
-    AudioDecoderMediaFoundation(const std::string filename);
-    ~AudioDecoderMediaFoundation();
-    int open();
-    int seek(int sampleIdx);
-    int read(int size, const SAMPLE *buffer);
-    int numSamples();
-    std::vector<std::string> supportedFileExtensions();
+	typedef short SHORT_SAMPLE;
 
-  private:
-    bool configureAudioStream();
-    bool readProperties();
-    void copyFrames(short *dest, size_t *destFrames, const short *src,
-        size_t srcFrames);
-    inline double secondsFromMF(__int64 mf);
-    inline __int64 mfFromSeconds(double sec);
-    inline __int64 frameFromMF(__int64 mf);
-    inline __int64 mfFromFrame(__int64 frame);
-    IMFSourceReader *m_pReader;
-    IMFMediaType *m_pAudioType;
-    wchar_t *m_wcFilename;
-    int m_nextFrame;
-    short *m_leftoverBuffer;
-    size_t m_leftoverBufferSize;
-    size_t m_leftoverBufferLength;
-    int m_leftoverBufferPosition;
-    __int64 m_mfDuration;
-    long m_iCurrentPosition;
-    bool m_dead;
-    bool m_seeking;
+public:
+	AudioDecoderMediaFoundation(const std::string filename);
+	~AudioDecoderMediaFoundation();
+	int open();
+	int seek(int sampleIdx);
+	// read N frames into buffer
+	int read(int frames, const float* buffer);
+	// read with interleave
+	int read(int frames, std::vector<float*>& buffer);
+	//
+	int numSamples();
+	std::vector<std::string> supportedFileExtensions();
+
+private:
+	bool configureAudioStream();
+	bool readProperties();
+	void copyFrames(short* dest, size_t* destFrames, const short* src, size_t srcFrames);
+	int read_internal(int size);
+	inline double secondsFromMF(__int64 mf);
+	inline __int64 mfFromSeconds(double sec);
+	inline __int64 frameFromMF(__int64 mf);
+	inline __int64 mfFromFrame(__int64 frame);
+	IMFSourceReader* m_pReader;
+	IMFMediaType* m_pAudioType;
+	wchar_t* m_wcFilename;
+	int m_nextFrame;
+	short* m_leftoverBuffer;
+	size_t m_leftoverBufferSize;
+	size_t m_leftoverBufferLength;
+	int m_leftoverBufferPosition;
+	__int64 m_mfDuration;
+	long m_iCurrentPosition;
+	bool m_dead;
+	bool m_seeking;
 	unsigned int m_iBitsPerSample;
 	SHORT_SAMPLE m_destBufferShort[8192];
 };
