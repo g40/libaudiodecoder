@@ -79,6 +79,7 @@ class DllExport AudioDecoderBase
 
 		// read into
 		uint64_t read(uint64_t size, const float *buffer) { return 0u; };
+		int read(int size, std::vector<float*> buffer) { return 0u; };
 
         /** Get the number of audio samples in the file. This will be a good estimate of the 
             number of samples you can get out of read(), though you should not rely on it

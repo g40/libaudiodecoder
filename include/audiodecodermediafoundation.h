@@ -26,13 +26,16 @@ struct IMFMediaSource;
 
 class DllExport AudioDecoderMediaFoundation : public AudioDecoderBase
 {
-
-	typedef short SHORT_SAMPLE;
+	static const int bufferSize = 8192;
 
 public:
 	AudioDecoderMediaFoundation(const std::string filename);
 	~AudioDecoderMediaFoundation();
+	//
 	int open();
+	//
+	bool close();
+	//
 	int seek(int sampleIdx);
 	// read N frames into buffer
 	int read(int frames, const float* buffer);
@@ -53,18 +56,25 @@ private:
 	inline __int64 mfFromFrame(__int64 frame);
 	IMFSourceReader* m_pReader;
 	IMFMediaType* m_pAudioType;
-	wchar_t* m_wcFilename;
+	std::wstring m_wfilename;
 	int m_nextFrame;
-	short* m_leftoverBuffer;
-	size_t m_leftoverBufferSize;
-	size_t m_leftoverBufferLength;
-	int m_leftoverBufferPosition;
+
 	__int64 m_mfDuration;
 	long m_iCurrentPosition;
 	bool m_dead;
 	bool m_seeking;
 	unsigned int m_iBitsPerSample;
-	SHORT_SAMPLE m_destBufferShort[8192];
+
+	// JME audit:vector?
+	short* m_leftoverBuffer;
+	size_t m_leftoverBufferSize;
+	size_t m_leftoverBufferLength;
+	int m_leftoverBufferPosition;
+
+	// 'native' bits. no conversions applied. interleaved
+	// JME audit: needs 24/32bit support
+	// JME audit: needs dynamic allocation
+	short m_destBuffer[bufferSize];
 };
 
 #endif // ifndef AUDIODECODERMEDIAFOUNDATION_H
