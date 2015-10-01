@@ -48,7 +48,7 @@
 class DllExport AudioDecoder : public AudioDecoderMediaFoundation
 {
     public:
-        AudioDecoder(const std::string filename) : AudioDecoderMediaFoundation(filename) {};
+        AudioDecoder() {};
 		virtual ~AudioDecoder()	{}
 };
 
@@ -57,7 +57,7 @@ class DllExport AudioDecoder : public AudioDecoderMediaFoundation
 class AudioDecoder : public AudioDecoderCoreAudio
 {
     public:
-        AudioDecoder(const std::string filename) : AudioDecoderCoreAudio(filename) {};
+        AudioDecoder() {};
 		virtual ~AudioDecoder()	{}
 };
 #endif

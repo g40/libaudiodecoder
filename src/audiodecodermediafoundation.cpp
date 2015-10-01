@@ -68,9 +68,8 @@ std::wstring s2ws(const std::string& s)
 }
 
 //-----------------------------------------------------------------------------
-AudioDecoderMediaFoundation::AudioDecoderMediaFoundation(const std::string filename)
-	: AudioDecoderBase(filename)
-	, m_pReader(NULL)
+AudioDecoderMediaFoundation::AudioDecoderMediaFoundation() :
+	m_pReader(NULL)
 	, m_pAudioType(NULL)
 	, m_nextFrame(0)
 	, m_leftoverBuffer(NULL)
@@ -117,7 +116,7 @@ close()
 }
 
 //-----------------------------------------------------------------------------
-int AudioDecoderMediaFoundation::open()
+int AudioDecoderMediaFoundation::open(const std::string& filename)
 {
 	if (sDebug)
 	{
@@ -138,6 +137,7 @@ int AudioDecoderMediaFoundation::open()
 	LPCWSTR result = (LPCWSTR)stemp.c_str();
 	*/
 	//LPCWSTR result;
+	m_filename = filename;
 	m_wfilename = s2ws(m_filename);
 	HRESULT hr(S_OK);
 	/*
@@ -232,7 +232,7 @@ int AudioDecoderMediaFoundation::seek(int sampleIdx)
 // performs a de-interleaving
 int AudioDecoderMediaFoundation::read(int frames, std::vector<float*>& buffer)
 {
-	frames = read(frames * buffer.size(), 0);
+	read(frames * buffer.size(), 0);
 	short* destBuffer = m_destBuffer;
 	float sampleMax = 1 << (m_iBitsPerSample - 1);
 	for (int frame = 0; frame < frames; frame++)
@@ -483,7 +483,7 @@ releaseSample:
 	return samples_read;
 }
 
-int AudioDecoderMediaFoundation::numSamples()
+int AudioDecoderMediaFoundation::samples()
 {
 	int len(secondsFromMF(m_mfDuration) * m_iSampleRate * m_iChannels);
 	return len % m_iChannels == 0 ? len : len + 1;

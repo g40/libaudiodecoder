@@ -66,10 +66,10 @@
 
 class AudioDecoderCoreAudio : public AudioDecoderBase {
 public:
-    AudioDecoderCoreAudio(const std::string filename);
+    AudioDecoderCoreAudio();
     ~AudioDecoderCoreAudio();
     // Overriding AudioDecoderBase 
-    int open();
+	int open(const std::string filename);
     int seek(int sampleIdx);
     int read(int size, const float* buffer);
     static std::vector<std::string> supportedFileExtensions();

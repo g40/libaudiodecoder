@@ -29,10 +29,10 @@ class DllExport AudioDecoderMediaFoundation : public AudioDecoderBase
 	static const int bufferSize = 8192;
 
 public:
-	AudioDecoderMediaFoundation(const std::string filename);
+	AudioDecoderMediaFoundation();
 	~AudioDecoderMediaFoundation();
 	//
-	int open();
+	int open(const std::string& filename);
 	//
 	bool close();
 	//
@@ -42,7 +42,7 @@ public:
 	// read with interleave
 	int read(int frames, std::vector<float*>& buffer);
 	//
-	int numSamples();
+	int samples();
 	std::vector<std::string> supportedFileExtensions();
 
 private:
